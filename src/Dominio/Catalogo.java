@@ -1,18 +1,26 @@
 package Dominio;
 import java.util.ArrayList;
 import java.util.List;
+import Excepciones.ExcepcionCatalogo;
+
 
 public class Catalogo {
 
     private List<CDs> listaCDs;
 
-    public Catalogo() {
+    public Catalogo() throws ExcepcionCatalogo {
         this.listaCDs = new ArrayList<>();
+        if (listaCDs == null) {
+            throw new ExcepcionCatalogo("Se ha producido un error");
+        }
     }
 
-    public void añadirCDs(CDs cd) {
+    public void añadirCDs(CDs cd) throws ExcepcionCatalogo{
         listaCDs.add(cd);
-        System.out.println(".");
+        System.out.println("CD añadido");
+        if (cd == null) {
+            throw new ExcepcionCatalogo("Se ha producido un error");
+        }
     }
 
     public List<CDs> getListaCDs() {
@@ -23,10 +31,18 @@ public class Catalogo {
         if (CDs != null && !existeCDsPorNombre(CDs.getNombre())) {
             listaCDs.add(CDs);
             System.out.println("CD añadido: " + CDs.getNombre());
-            return true; // Se añadió correctamente
+            return true;
         }
-        System.out.println("Ya existe un software con el nombre: " + CDs.getNombre());
-        return false;
+        if (CDs == null) {
+            throw new ExcepcionCatalogo("Se ha producido un error");
+        }
+        if (existeCDsPorNombre(CDs.getNombre())) {
+            throw new ExcepcionCatalogo("Ya existe un CD con este nombre");
+        }
+        listaCDs.add(CDs);
+        System.out.println("CD añadido: " + CDs.getNombre());
+        return true;
+
     }
 
     private boolean existeCDsPorNombre(String nombre) {
